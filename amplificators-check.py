@@ -7,8 +7,6 @@ import requests
 from dns import resolver
 from pymemcache.client import base
 from pysnmp.hlapi import *
-#apt install ldap-utils
-#apt install ntpstat
 
 
 def scanSSDP(file):
