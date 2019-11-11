@@ -1,3 +1,7 @@
+"""
+Python3 program to check if a host is vulnerable to a Amplification UDP protocol.
+"""
+
 import sys
 import socket
 import os
@@ -22,15 +26,15 @@ def scanSSDP(file):
   with open(file) as opennedFile:
     for line in opennedFile:
       s.sendto('\r\n'.join(msg).encode(), (line, 1900) )
-      aberto = 0
+      open = 0
       while True:
         try:
           data, addr = s.recvfrom(32*1024)
         except socket.timeout:
           break
-        aberto = 1
+        open = 1
         print(line.replace('\n','') + ';Open')
-      if (aberto == 0):
+      if (open == 0):
         print(line.replace('\n','') + ';Closed')
 
 
@@ -109,7 +113,7 @@ def scanLDAP(file):
    try:
     result = subprocess.run(cmd, timeout=0.5, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if "numResponses" in result.stdout.decode():
-     print(line.replace('\n','')+';Aberto')
+     print(line.replace('\n','')+';Open')
    except:
     print(line.replace('\n','')+';Closed')
 
@@ -126,12 +130,12 @@ def scanSNMP(file):
     )
     try:
      if errorIndication or errorIndex or errorStatus:
-        print(line.replace('\n','') + ';Fechado')
+        print(line.replace('\n','') + ';Closed')
      else:
         for varBind in varBinds:
-            print(line.replace('\n','') + ';Aberto')
+            print(line.replace('\n','') + ';Open')
     except:
-          print(line.replace('\n','') + ';Fechado')
+          print(line.replace('\n','') + ';Closed')
 
 
 def scanNTP(file):
@@ -146,7 +150,7 @@ def scanNTP(file):
      else:
       rv='Closed'
     except:
-         rv='Closed'
+     rv='Closed'
 
     try:
      result2 = subprocess.run(cmd2, timeout=0.5, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -155,7 +159,7 @@ def scanNTP(file):
      else:
       monlist='Closed'
     except:
-         monlist='Closed'
+     monlist='Closed'
 
     if (rv or monlist) != 'Closed':
      print(line.replace('\n','') + ';Open')
@@ -170,7 +174,7 @@ def scanNetBIOS(file):
       if result.stdout.decode().find("Address") == -1:
         print(line.replace('\n','')+';Closed')
       else:
-        print(line.replace('\n','')+';Open')
+       print(line.replace('\n','')+';Open')
 
 
 def scanPortmap(file):
@@ -226,7 +230,7 @@ if len(sys.argv) > 1:
 
   #Argument HELP
   if ("--help" in str(sys.argv[1]) or (str(sys.argv[1]) == "-h")):
-    print ("Usage: amplificators-check.py [OPTION] [FILE]")
+    print ("Usage: python3 amplificators-check.py [OPTION] [FILE]")
     print ("  -h, --help                     	         Show this menu"                    )
     print ("  --scan-QOTD <file>, -qotd <file>           Check for QOTD amplificators"      )
     print ("  --scan-CHARGEN <file>, -chargen <file>     Check for CHARGEN amplificators"   )
